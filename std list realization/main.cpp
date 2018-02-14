@@ -233,6 +233,32 @@ template <typename typeOfData> class List
             return temp;
             }
             
+        
+        void erase ( int idToErase )
+            {
+            listUnit* pointerToCurrentCell = tail;
+            
+            for ( int currentCellId = 0; currentCellId <= idToErase; currentCellId++ )
+                {
+                #if defined ( DEBUG ) || defined ( SECURE1 )
+                if ( currentCellId == listSize )
+                    {
+                    log = log + "Runned out of list. Check id to insert after.\n";
+                    return;
+                    }
+                #endif
+                
+                
+                pointerToCurrentCell = pointerToCurrentCell->next;
+                }
+            
+            pointerToCurrentCell->previous->next = pointerToCurrentCell->next;
+            pointerToCurrentCell->next->previous = pointerToCurrentCell->previous;
+            
+            listSize--;
+            delete pointerToCurrentCell;
+            }
+            
             
     
     
@@ -316,11 +342,19 @@ int main()
     
     
     
+    myList.push_back ( 0 );
+    myList.push_back ( 1 );
+    myList.push_back ( 2 );
+    myList.push_back ( 3 );
+    myList.push_back ( 4 );
+    myList.push_back ( 5 );
     myList.push_back ( 6 );
-    myList.push_front ( 4 );
-    myList.pop_back();
+    myList.push_back ( 7 );
     
-    myList.insert ( 0, 5 );
+    myList.erase ( 4 );
+    
+    
+    
     
     std::cout << "DEBUG: " << myList.front() << "\n";
     
