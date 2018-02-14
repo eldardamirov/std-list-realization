@@ -83,7 +83,7 @@ template <typename typeOfData> class List
             
             for ( int i = 0; i < listSize; i++ )
                 {
-                printf ( "%d ", currentCell->value );
+                printf ( "%f ", currentCell->value );
                 
                 currentCell = currentCell->next;
                 }
@@ -95,6 +95,37 @@ template <typename typeOfData> class List
         
         ///-----------------------------------------------------------------------------------------------------------------------------------------------------------------
     
+        typeOfData& operator[] ( const typeOfData index )  
+            {
+            listUnit* pointerToCurrentCell = tail;
+            
+            for ( int currentCellId = 0; currentCellId <= index; currentCellId++ )
+                {
+                #if defined ( DEBUG ) || defined ( SECURE1 )
+                if ( currentCellId == listSize )
+                    {
+                    log = log + "Runned out of list. Check id to insert after.\n";
+//                    return nullptr;
+                    }
+                #endif
+                
+                
+                pointerToCurrentCell = pointerToCurrentCell->next;
+                }
+                
+            return pointerToCurrentCell->value;
+            }
+    
+    
+        int size()
+            {
+            return ( listSize - 2 );
+            }
+            
+        bool isEmpty()
+            {
+            return ( listSize == 2 );
+            }
     
     
         typeOfData top()
@@ -108,7 +139,7 @@ template <typename typeOfData> class List
             }
             
             
-        listUnit* push_back ( int valueToPush )
+        listUnit* push_back ( typeOfData valueToPush )
             {
             listUnit* temp = new listUnit;
 
@@ -129,14 +160,14 @@ template <typename typeOfData> class List
             }
             
             
-        listUnit* push_front ( int valueToPush )
+        listUnit* push_front ( typeOfData valueToPush )
             {
             listUnit* temp = new listUnit;
         
-            tail->value = valueToPush;
+            tail->value    = valueToPush;
             
             tail->previous = temp;
-            temp->next = tail;
+            temp->next     = tail;
             
             tail = temp;
             
@@ -338,23 +369,18 @@ template <typename typeOfData> class List
 
 int main()
     {
-    List <int> myList;
+    List <double> myList;
     
     
+    for ( int i = 0; i < 10; i++ )
+        {
+        myList.push_back ( 2.58 );
+        }
+   
+    myList [ 5 ] = 89.69;
     
-    myList.push_back ( 0 );
-    myList.push_back ( 1 );
-    myList.push_back ( 2 );
-    myList.push_back ( 3 );
-    myList.push_back ( 4 );
-    myList.push_back ( 5 );
-    myList.push_back ( 6 );
-    myList.push_back ( 7 );
-    
-    myList.erase ( 4 );
-    
-    
-    
+//    std::cout << "DEBUG: "<< myList [ 5 ];
+    printf ( "HEY%fHEY", myList [ 5 ] );
     
     std::cout << "DEBUG: " << myList.front() << "\n";
     
