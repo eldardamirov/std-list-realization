@@ -77,6 +77,8 @@ template <typename typeOfData> class List
         ///-----------------------------------------------------------------------------------------------------------------------------------------------------------------
         void printItAll()
             {
+            printf ( "SIZE: %d\n", listSize );
+            
             listUnit* currentCell = tail;
             
             for ( int i = 0; i < listSize; i++ )
@@ -97,25 +99,31 @@ template <typename typeOfData> class List
     
         typeOfData top()
             {
-            return head->value;
+            return head->previous->value;
             }
             
         typeOfData front()
             {
-            return tail->value;
+            return tail->next->value;
             }
             
             
         listUnit* push_back ( int valueToPush )
             {
             listUnit* temp = new listUnit;
+
+            head->value    = valueToPush;
             
-            temp->value    = valueToPush;
-            
-            temp->previous = head;
             head->next     = temp;
+            temp->previous = head;
             
             head = temp;
+            
+            #ifdef DEBUG
+            head->value = poisonValue;
+            #endif
+            
+            listSize++;
             
             return temp;
             }
@@ -124,15 +132,68 @@ template <typename typeOfData> class List
         listUnit* push_front ( int valueToPush )
             {
             listUnit* temp = new listUnit;
+        
+            tail->value = valueToPush;
             
-            temp->value = valueToPush;
-            
+            tail->previous = temp;
             temp->next = tail;
-            tail->previoud = temp;
+            
+            tail = temp;
+            
+            #ifdef DEBUG
+            tail->value = poisonValue;
+            #endif
+            
+            listSize++;
             
             return temp;
             }
+            
+            
         
+        void pop_back()
+            {
+            #if defined ( DEBUG ) || defined ( SECURE1 ) || defined ( SECURE0 )
+            if ( listSize <= 2 )
+                {
+                log = log + "Unable to pop_back. List is at its minimum size!\n";
+                
+                return;
+                }
+            #endif
+            
+            head = head->previous;
+            
+            #ifdef DEBUG
+            head->value = poisonValue;
+            #endif
+            
+            listSize--;
+            delete head->next;
+            }
+            
+        void pop_front()
+            {
+            #if defined ( DEBUG ) || defined ( SECURE1 ) || defined ( SECURE0 )
+            if ( listSize <= 2 )
+                {
+                log = log + "Unable to pop_front. List is at its minimum size!\n";
+                
+                return;
+                }
+            #endif
+            
+            tail = tail->next;
+            
+            #ifdef DEBUG
+            tail->value = poisonValue;
+            #endif
+            
+            listSize--;
+            delete tail->previous;
+            }
+            
+            
         
     
     
@@ -253,9 +314,15 @@ int main()
     {
     List <int> myList;
     
-    myList.insert ( 1, 5 );
-    myList.insert ( 1, 5 );
-    myList.insert ( 1, 5 );
+    
+    
+    myList.push_back ( 6 );
+    myList.push_front ( 4 );
+    myList.pop_back();
+    
+    myList.insert ( 0, 5 );
+    
+    std::cout << "DEBUG: " << myList.front() << "\n";
     
     myList.printItAll();
     
