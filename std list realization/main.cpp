@@ -99,13 +99,14 @@ template <typename typeOfData> class List
             {
             listUnit* pointerToCurrentCell = tail;
             
+            
             for ( int currentCellId = 0; currentCellId <= index; currentCellId++ )
                 {
                 #if defined ( DEBUG ) || defined ( SECURE1 )
                 if ( currentCellId == listSize )
                     {
                     log = log + "Runned out of list. Check id to insert after.\n";
-//                    return nullptr;
+                    return nullReference;
                     }
                 #endif
                 
@@ -307,6 +308,7 @@ template <typename typeOfData> class List
         
         #if defined ( DEBUG ) || defined ( SECURE0 ) || defined ( SECURE1 )
         typeOfData poisonValue = NULL;
+        typeOfData& nullReference = poisonValue;
         #endif
         
         
