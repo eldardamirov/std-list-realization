@@ -266,6 +266,32 @@ template <typename typeOfData> class List
             }
             
         
+        typeOfData getHead()
+            {
+            return tail->next->value;    
+            }
+        
+        
+        typeOfData* getTail ( size_t& tailSize )
+            {
+            size_t listTailSize = ( listSize - 3 );
+            
+            typeOfData* tempStorage = new typeOfData [ listTailSize ];
+            tailSize = listTailSize;
+            
+            listUnit* pointerToCurrentCell = ( tail->next )->next; 
+            
+            for ( int currentElementId = 0; currentElementId < listTailSize; currentElementId++ )
+                {
+                tempStorage [ currentElementId ] = pointerToCurrentCell->value;
+                
+                pointerToCurrentCell = pointerToCurrentCell->next;
+                }
+                
+            return tempStorage;
+            }
+        
+        
         void erase ( int idToErase )
             {
             listUnit* pointerToCurrentCell = tail;
@@ -293,11 +319,7 @@ template <typename typeOfData> class List
             
             
     
-    
-        
-        
-    
-    
+
     
     private:
         int listSize = 0;
@@ -374,15 +396,25 @@ int main()
     List <double> myList;
     
     
-    for ( int i = 0; i < 10; i++ )
+    myList.push_front ( 5 );
+    
+    for ( int i = 0; i < 3; i++ )
         {
         myList.push_back ( 2.58 );
         }
    
-    myList [ 5 ] = 89.69;
+//    myList [ 5 ] = 89.69;
+
+    size_t tempSize = 0;
+    double* temp = myList.getTail ( tempSize );
+    
+    for ( int i = 0; i < tempSize; i++ )    
+        {
+        printf ( "HAHA: %f\n", temp [ i ] );
+        }
     
 //    std::cout << "DEBUG: "<< myList [ 5 ];
-    printf ( "HEY%fHEY", myList [ 5 ] );
+//    printf ( "HEY%fHEY", myList [ 5 ] );
     
     std::cout << "DEBUG: " << myList.front() << "\n";
     
